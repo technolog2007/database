@@ -2,16 +2,16 @@
 --     WITH ENCODING = 'UTF8'
 --     OWNER = postgres
 --     CONNECTION LIMIT 15;
-DROP TABLE  schema_epicenter.tb_shop;
+DROP TABLE  schema_epicenter.tb_shops;
 DROP TABLE  schema_epicenter.tb_products;
-DROP TABLE  schema_epicenter.tb_category;
+DROP TABLE  schema_epicenter.tb_categories;
 DROP TABLE  schema_epicenter.tb_result;
 
 DROP SCHEMA schema_epicenter;
 
 CREATE SCHEMA schema_epicenter;
 
-CREATE TABLE IF NOT EXISTS schema_epicenter.tb_shop
+CREATE TABLE IF NOT EXISTS schema_epicenter.tb_shops
 (
     shop_id       SERIAL UNIQUE NOT NULL PRIMARY KEY,
     shop_name     varchar(100),
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS schema_epicenter.tb_shop
     shop_location varchar(200)
 );
 
-CREATE TABLE IF NOT EXISTS schema_epicenter.tb_category
+CREATE TABLE IF NOT EXISTS schema_epicenter.tb_categories
 (
     category_id   SERIAL UNIQUE NOT NULL PRIMARY KEY,
     category_name varchar(100)
@@ -27,13 +27,16 @@ CREATE TABLE IF NOT EXISTS schema_epicenter.tb_category
 
 CREATE TABLE IF NOT EXISTS schema_epicenter.tb_products
 (
-    products_id    SERIAL UNIQUE NOT NULL PRIMARY KEY,
+    product_id    SERIAL UNIQUE NOT NULL PRIMARY KEY,
     category_id int,
-    products_name  varchar(100),
-    products_price int
+    product_name  varchar(100),
+    product_price int
 );
 
 CREATE TABLE IF NOT EXISTS schema_epicenter.tb_result
 (
-    result_it int
+    shop_id int,
+    products_id int,
+    amount_it float/*,
+    sum_price double precision*/
 );

@@ -33,7 +33,7 @@ public class ConnectToDB {
      *
      * @return - пропертіз
      */
-    private static Properties getProperties() {
+    private static Properties loadProperties() {
         return new PropertiesLoader().loadProperties(PROPERTIES_FILE);
     }
 
@@ -44,7 +44,7 @@ public class ConnectToDB {
      * @return - значення пропертіз із файла пропертіз
      */
     private static String getProperty(String property) throws MyException {
-        String url = getProperties().getProperty(property);
+        String url = loadProperties().getProperty(property);
         if (url != null) {
             return url;
         } else {

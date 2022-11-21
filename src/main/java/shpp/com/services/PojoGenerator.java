@@ -11,7 +11,7 @@ import java.util.Random;
 public class PojoGenerator {
     private static final int UPPER_BOUND = 1000;
 
-    private Random createRandom() throws NoSuchAlgorithmException {
+    public Random createRandom() throws NoSuchAlgorithmException {
         return SecureRandom.getInstanceStrong();
     }
 
@@ -23,7 +23,7 @@ public class PojoGenerator {
                 ", " + createRandom().nextInt(UPPER_BOUND);
         return new Shop().setName(street).setCity(city).setLocation(location);
     }
-
+    // category id, category name, product name and price
     public Product createProduct(List<String[]> products) throws NoSuchAlgorithmException {
         String[] temp = products.get(createRandom().nextInt(products.size() - 1));
         Integer categoryID = Integer.parseInt(temp[0]);
