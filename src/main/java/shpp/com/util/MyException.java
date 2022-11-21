@@ -1,4 +1,4 @@
-package shpp.com.exception;
+package shpp.com.util;
 
 public class MyException extends Exception{
 

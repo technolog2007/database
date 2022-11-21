@@ -1,8 +1,8 @@
-package main.java.shpp.com.loader;
+package shpp.com.util;
 
-import main.java.shpp.com.connect.ConnectToMyDB;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import shpp.com.repo.ConnectToDB;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -25,7 +25,7 @@ public class PropertiesLoader {
         Properties properties = new Properties();
 
         try {
-            InputStream rootPath = ConnectToMyDB.class.getClassLoader().getResourceAsStream(fileName);
+            InputStream rootPath = ConnectToDB.class.getClassLoader().getResourceAsStream(fileName);
             properties.load(rootPath);
             return properties;
         } catch (Exception e) {
