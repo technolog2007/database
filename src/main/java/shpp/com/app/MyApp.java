@@ -130,29 +130,29 @@ public class MyApp {
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             int numberOgProduct = Integer.parseInt(getProperty("numberOfProducts"));
             int count = 0;
-            for(int i = 0; i < numberOgProduct; i++){
-                Product prod = pojoGenerator.createProduct(loader);
-                if(new MyValidator(prod).complexValidator()) {
-//                    setDataToTBProduct(statement, prod, count);
-                    try {
-                        statement.setInt(1, prod.getCategoryID());
-                        statement.setString(2, prod.getName());
-                        statement.setDouble(3, prod.getPrice());
-                        statement.addBatch();
-                        count++;
-                        if (count % 100 == 0) {
-                            logger.info("Download product line # {} ", count);
-                            statement.executeBatch();
-                        }
-                    } catch (SQLException e) {
-                        throw new RuntimeException();
-                    }
-                }
-            }
-//            Stream.generate(() -> pojoGenerator.createProduct(loader)).
-//                    filter(prod -> new MyValidator(prod).complexValidator()).
-//                    limit(numberOgProduct).
-//                    forEach(valProd -> setDataToTBProduct(statement, valProd, count));
+//            for(int i = 0; i < numberOgProduct; i++){
+//                Product prod = pojoGenerator.createProduct(loader);
+//                if(new MyValidator(prod).complexValidator()) {
+////                    setDataToTBProduct(statement, prod, count);
+//                    try {
+//                        statement.setInt(1, prod.getCategoryID());
+//                        statement.setString(2, prod.getName());
+//                        statement.setDouble(3, prod.getPrice());
+//                        statement.addBatch();
+//                        count++;
+//                        if (count % 100 == 0) {
+//                            logger.info("Download product line # {} ", count);
+//                            statement.executeBatch();
+//                        }
+//                    } catch (SQLException e) {
+//                        throw new RuntimeException();
+//                    }
+//                }
+//            }
+            Stream.generate(() -> pojoGenerator.createProduct(loader)).
+                    filter(prod -> new MyValidator(prod).complexValidator()).
+                    limit(numberOgProduct).
+                    forEach(valProd -> setDataToTBProduct(statement, valProd, count));
             statement.executeBatch();
         }
     }
