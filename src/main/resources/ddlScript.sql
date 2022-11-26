@@ -1,7 +1,7 @@
-DROP TABLE  tb_result;
-DROP TABLE  tb_categories;
-DROP TABLE  tb_shops;
-DROP TABLE  tb_products;
+DROP TABLE IF EXISTS tb_result;
+DROP TABLE IF EXISTS tb_categories;
+DROP TABLE IF EXISTS tb_shops;
+DROP TABLE IF EXISTS tb_products;
 
 CREATE TABLE IF NOT EXISTS tb_shops
 (
