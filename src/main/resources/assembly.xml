@@ -13,6 +13,11 @@
             <includes>
                 <include>*.properties</include>
                 <include>logback.xml</include>
+                <include>ddlScript.sql</include>
+                <include>test.sql</include>
+                <include>cities.txt</include>
+                <include>products.txt</include>
+                <include>streets.txt</include>
             </includes>
         </fileSet>
         <fileSet>

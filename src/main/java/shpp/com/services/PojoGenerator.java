@@ -2,34 +2,30 @@ package shpp.com.services;
 
 import shpp.com.model.Product;
 import shpp.com.model.Shop;
+import shpp.com.util.MyFileLoader;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
 
 public class PojoGenerator {
-    private static final int UPPER_BOUND = 1000;
-
-    public Random createRandom() throws NoSuchAlgorithmException {
-        return SecureRandom.getInstanceStrong();
-    }
+    private static final int UPPER_GENERATE_BOUND = 1000;
 
     // name, location, City
-    public Shop createShop(List<String> cities, List<String> streets) throws NoSuchAlgorithmException {
-        String street = "ТЦ Епіцентр № " + createRandom().nextInt(UPPER_BOUND);
-        String city = cities.get(createRandom().nextInt(cities.size() - 1));
-        String location = "м. " + city + ", вул. " + streets.get(createRandom().nextInt(cities.size() - 1)) +
-                ", " + createRandom().nextInt(UPPER_BOUND);
+    public Shop createShop(List<String> cities, List<String> streets) {
+        String street = "Epicenter № " + new Random().nextInt(UPPER_GENERATE_BOUND);
+        String city = cities.get(new Random().nextInt(cities.size() - 1));
+        String location = "city " + city + ", str. " + streets.get(new Random().nextInt(cities.size() - 1)) +
+                ", " + new Random().nextInt(UPPER_GENERATE_BOUND);
         return new Shop().setName(street).setCity(city).setLocation(location);
     }
+
     // category id, category name, product name and price
-    public Product createProduct(List<String[]> products) throws NoSuchAlgorithmException {
-        String[] temp = products.get(createRandom().nextInt(products.size() - 1));
-        Integer categoryID = Integer.parseInt(temp[0]);
-        String categoryName = temp[1];
-        String name = temp[2] + ", арт. # " + createRandom().nextInt(UPPER_BOUND);
-        int price = createRandom().nextInt(UPPER_BOUND);
-        return new Product().setCategoryID(categoryID).setName(name).setPrice(price).setCategory(categoryName);
+    public Product createProduct(MyFileLoader loader) {
+        List<String> temp = loader.getProducts().get(new Random().nextInt(loader.getProducts().size() - 1));
+        String name = temp.get(2) + ", art. # " + new Random().nextInt(UPPER_GENERATE_BOUND);
+        return new Product().
+                setCategoryID(Integer.parseInt(temp.get(0))).
+                setName(name).
+                setPrice(new Random().nextDouble() * UPPER_GENERATE_BOUND);
     }
 }

@@ -1,13 +1,13 @@
-Суми
-Київ
-Харков
-Полтава
-Чернігів
-Дніпро
-Запоріжжя
-Кривий ріг
-Львів
-Ужгород
-Прилуки
-Житомир
-Миколаїв
+Sumy
+Kyiv
+Kharkiv
+Poltava
+Chernihiv
+Dnipro
+Zaporizhzhia
+Kryvyi Rih
+Lviv
+Uzhhorod
+Plyuky
+Zhytomyr
+Mykolayiv

@@ -6,12 +6,12 @@ import jakarta.validation.constraints.Size;
 
 public class Shop {
     @NotNull
-    @Pattern(regexp = "ТЦ Епіцентр №\\s+\\d{3}")
+    @Pattern(regexp = "Epicenter №\\s+\\d{3}")
     private String name;
     @NotNull
     @Size(min = 10, max = 200)
     private String location;
-    @Size(min = 4, max = 100)
+    @Size(min = 4, max = 20)
     @NotNull
     private String city;
 

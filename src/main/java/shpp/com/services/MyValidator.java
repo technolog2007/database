@@ -18,7 +18,7 @@ public class MyValidator {
     private final Set<ConstraintViolation<Object>> violations;
 
     /**
-     * Конструктор инициализирует Set для обїекта pojo
+     * The constructor initializes the Set for the pojo object
      * @param pojo - объект
      */
     public MyValidator(Object pojo) {
@@ -26,7 +26,7 @@ public class MyValidator {
     }
 
     /**
-     * Метод возвращает булевое true, если Set пустой
+     * Method returns boolean true if Set is empty
      * @return -
      */
     public boolean complexValidator() {
@@ -34,13 +34,12 @@ public class MyValidator {
     }
 
     /**
-     * Метод сохраняет в List<String> все выявленные невалидные сообщения и
-     * возвращает его
-     * @return - List<String>, содержащий error сообщения
+     * The method stores all detected invalid messages in a List<String> and returns it
+     * @return - List<String>, containing error messages
      */
     public List<String> validationMessagesGenerator() {
         ArrayList<String> errorMessage = new ArrayList<>();
-        violations.forEach(x -> errorMessage.add(x.getMessage()));
+        violations.forEach(x -> errorMessage.add(x.getMessageTemplate()));
         return errorMessage;
     }
 }

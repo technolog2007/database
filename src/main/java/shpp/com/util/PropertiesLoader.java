@@ -2,6 +2,7 @@ package shpp.com.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import shpp.com.app.MyApp;
 import shpp.com.repo.ConnectToDB;
 
 import java.io.FileInputStream;
@@ -10,7 +11,6 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class PropertiesLoader {
-
     Logger logger = LoggerFactory.getLogger(PropertiesLoader.class);
 
     /**
@@ -18,14 +18,13 @@ public class PropertiesLoader {
      * from IDEA and external properties from Jar.
      * @param fileName - properties filename
      * @return - link to properties buffer
-     * @throws Exception
      */
     public Properties loadProperties(String fileName){
 
         Properties properties = new Properties();
 
         try {
-            InputStream rootPath = ConnectToDB.class.getClassLoader().getResourceAsStream(fileName);
+            InputStream rootPath = MyApp.class.getClassLoader().getResourceAsStream(fileName);
             properties.load(rootPath);
             return properties;
         } catch (Exception e) {

@@ -10,8 +10,7 @@ import java.util.Properties;
 
 public class ConnectToDB {
     private static final String PROPERTIES_FILE = "app.properties";
-
-    Logger logger = LoggerFactory.getLogger(ConnectToDB.class);
+    private static final Logger logger = LoggerFactory.getLogger(ConnectToDB.class);
     private final Connection connection;
 
     public ConnectToDB() throws SQLException, MyException {
@@ -28,20 +27,19 @@ public class ConnectToDB {
     }
 
     /**
-     * Метод загружає і повртає всі пропертіз із проперті файла
-     * //     * @param file - назва файлу пропертіз
+     * Method to load and restore all properties from a property file
      *
-     * @return - пропертіз
+     * @return - property
      */
     private static Properties loadProperties() {
         return new PropertiesLoader().loadProperties(PROPERTIES_FILE);
     }
 
     /**
-     * Метод повертає обраний пропертіз у вигляді строки
+     * The method returns the selected property as a string
      *
-     * @param property - назва пропертіз
-     * @return - значення пропертіз із файла пропертіз
+     * @param property - property name
+     * @return - property values from the properties file
      */
     private static String getProperty(String property) throws MyException {
         String url = loadProperties().getProperty(property);

@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.example</groupId>
-    <artifactId>BD</artifactId>
+    <groupId>shpp.com</groupId>
+    <artifactId>DB</artifactId>
     <version>1.0.0</version>
 
     <properties>
@@ -91,7 +91,7 @@
                             <archive>
                                 <manifest>
                                     <addClasspath>true</addClasspath>
-                                    <mainClass>shpp.com.MyAppSender</mainClass>
+                                    <mainClass>shpp.com.app.MyApp</mainClass>
                                     <classpathPrefix>lib/</classpathPrefix>
                                 </manifest>
                                 <manifestEntries>
@@ -125,7 +125,7 @@
                             </formats>
                             <archive>
                                 <manifest>
-                                    <mainClass>shpp.com.MyAppSender</mainClass>
+                                    <mainClass>shpp.com.app.MyApp</mainClass>
                                     <addClasspath>true</addClasspath>
                                 </manifest>
                             </archive>

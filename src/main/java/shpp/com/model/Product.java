@@ -1,32 +1,28 @@
 package shpp.com.model;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class Product {
 
     @NotNull
-    @Size(min = 5, max = 20)
+    @Size(min = 5, max = 25)
     private String name;
-    @NotNull
-    @Size(min = 5, max = 20)
-    private String category;
-    @NotNull
+    @Max(value = 3000000)
+    @Min(value = 0)
     private int categoryID;
-    @NotNull
-    private int price;
+
+    @Min(value = 0)
+    private double price;
 
     public Product() {
-        //
+        // it's empty
     }
 
     public Product setName(String name) {
         this.name = name;
-        return this;
-    }
-
-    public Product setCategory(String category) {
-        this.category = category;
         return this;
     }
 
@@ -35,7 +31,7 @@ public class Product {
         return this;
     }
 
-    public Product setPrice(int price) {
+    public Product setPrice(double price) {
         this.price = price;
         return this;
     }
@@ -44,23 +40,17 @@ public class Product {
         return name;
     }
 
-    public String getCategory() {
-        return category;
-    }
-
     public int getCategoryID() {
         return categoryID;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
-
     @Override
     public String toString() {
         return "Product{" +
                 "name='" + name + '\'' +
-                ", category='" + category + '\'' +
                 ", categoryID=" + categoryID +
                 ", price=" + price +
                 '}';

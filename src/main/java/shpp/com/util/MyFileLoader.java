@@ -1,22 +1,21 @@
-package shpp.com.services;
+package shpp.com.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import shpp.com.app.MyApp;
+import shpp.com.repo.ConnectToDB;
 import shpp.com.util.MyException;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MyFileLoader {
 
-    private static final Logger logger = LoggerFactory.getLogger(MyFileLoader.class);
     private String line;
 
-    private final List<String[]> products;
+    private final List<List<String>> products;
     private final List<String> streets;
     private final List<String> cities;
-
     private final List<String> category;
 
     public MyFileLoader() {
@@ -26,8 +25,20 @@ public class MyFileLoader {
         this.category = new ArrayList<>();
     }
 
+    private FileReader getFileReader(String fileName) {
+        try {
+            return new FileReader("config/" + fileName);
+        } catch (FileNotFoundException e) {
+            try {
+                return new FileReader("src/main/resources/" + fileName);
+            } catch (FileNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+    }
+
     public void createInputDataFromFile(String fileName) throws MyException {
-        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+        try (BufferedReader br = new BufferedReader(getFileReader(fileName))) {
             while ((line = br.readLine()) != null) {
                 changer(fileName);
             }
@@ -41,24 +52,21 @@ public class MyFileLoader {
     private void changer(String fileName) throws MyException {
         if (fileName.contains("cities")) {
             cities.add(line);
-            logger.info("city : {}, is add successful!", line);
         } else if (fileName.contains("street")) {
             streets.add(line);
-            logger.info("street : {}, is add successful!", line);
         } else if (fileName.contains("products")) {
-            String[] product = line.split(", ");
+            List<String> product = Arrays.asList(line.split(", "));
             products.add(product);
-            if (Integer.parseInt(product[0]) == (category.size() + 1)) {
-                category.add(product[1]);
+            if (Integer.parseInt(product.get(0)) == (category.size() + 1)) {
+                category.add(product.get(1));
             }
-            logger.info("product : {}, and category id {} - {} is add successful!", product[2], product[0], product[1]);
         } else {
             throw new MyException("ERROR! Please, rename files with input data, which they are consist " +
                     "\"cities\", \"street\", \"products\"");
         }
     }
 
-    public List<String[]> getProducts() {
+    public List<List<String>> getProducts() {
         return products;
     }
 
