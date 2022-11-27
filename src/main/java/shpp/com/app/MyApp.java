@@ -1,5 +1,6 @@
 package shpp.com.app;
 
+import ch.qos.logback.core.util.Loader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import shpp.com.model.Product;
@@ -13,6 +14,7 @@ import shpp.com.util.MyException;
 import shpp.com.util.PropertiesLoader;
 
 import java.sql.*;
+import java.util.List;
 import java.util.Properties;
 import java.util.Random;
 import java.util.stream.Stream;
@@ -20,9 +22,6 @@ import java.util.stream.Stream;
 public class MyApp {
     private static final Logger logger = LoggerFactory.getLogger(MyApp.class);
     private static final String DDL_SCRIPT_FILE = "ddlScript.sql";
-    private static final String STREETS_FILE = "streets.txt";
-    private static final String CITIES_FILE = "cities.txt";
-    private static final String PRODUCTS_FILE = "products.txt";
     private static final String PROPERTIES_FILE = "app.properties";
 
     public static void main(String[] args) throws SQLException, MyException {
@@ -39,19 +38,18 @@ public class MyApp {
         double finishTime = getFinishTime(startTime);
         logger.info("Dll script time is {} sec", finishTime);
         // generate input data
-        MyFileLoader loader = loadInputData();
         PojoGenerator pojoGenerator = new PojoGenerator();
         // filling out the shop sign
         startTime = System.currentTimeMillis();
-        fillTBShop(connection, loader, pojoGenerator);
+        fillTBShop(connection, pojoGenerator);
         logger.info("Shop generator time is {} sec", getFinishTime(startTime));
         startTime = System.currentTimeMillis();
         // filling out the category table
-        fillTBCategory(connection, loader);
+        fillTBCategory(connection);
         logger.info("Category generator time is {} sec", getFinishTime(startTime));
         startTime = System.currentTimeMillis();
         // filling in the products table
-        fillTBProducts(connection, pojoGenerator, loader);
+        fillTBProducts(connection, pojoGenerator);
         logger.info("Product generator time is {} sec", getFinishTime(startTime));
         startTime = System.currentTimeMillis();
         // filling in the results table
@@ -80,16 +78,15 @@ public class MyApp {
      * The method fills the shop table with random values (shop_name, shop_city, shop_location)
      *
      * @param connection    - connection
-     * @param loader        - data loader for generation from a file
      * @param pojoGenerator - shop object generator
      * @throws SQLException -
      * @throws MyException  -
      */
-    private static void fillTBShop(Connection connection, MyFileLoader loader, PojoGenerator pojoGenerator)
+    private static void fillTBShop(Connection connection, PojoGenerator pojoGenerator)
             throws SQLException, MyException {
         String sql = "INSERT INTO tb_shops (shop_name, shop_city, shop_location) VALUES (?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            Stream.generate(() -> pojoGenerator.createShop(loader.getCities(), loader.getStreets())).
+            Stream.generate(pojoGenerator::createShop).
                     filter(s -> new MyValidator(s).complexValidator()).
                     limit(Integer.parseInt(getProperty("numberOfShops"))).
                     forEach(s -> setDataToTBShop(statement, s));
@@ -101,17 +98,21 @@ public class MyApp {
      * The method fills table of product categories (category_name)
      *
      * @param connection - connection
-     * @param loader     - data loader for generation from a file
+     *                   //     * @param loader     - data loader for generation from a file
      * @throws SQLException -
      */
-    private static void fillTBCategory(Connection connection, MyFileLoader loader) throws SQLException {
+    private static void fillTBCategory(Connection connection) throws SQLException {
         String sqlCategory = "INSERT INTO tb_categories (category_name) VALUES (?)";
         try (PreparedStatement statement = connection.prepareStatement(sqlCategory)) {
-            for (int i = 0; i < loader.getCategory().size(); i++) {
-                statement.setString(1, loader.getCategory().get(i));
+            PojoGenerator generator  = new PojoGenerator();
+            List<String> list = generator.getListOfCategories();
+            for (String s : list) {
+                statement.setString(1, s);
                 statement.addBatch();
             }
             statement.executeBatch();
+        } catch (MyException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -120,40 +121,34 @@ public class MyApp {
      *
      * @param connection    - connection
      * @param pojoGenerator - product object generator
-     * @param loader        - data loader for generation from a file
+     *                      //     * @param loader        - data loader for generation from a file
      * @throws SQLException -
      * @throws MyException  -
      */
-    private static void fillTBProducts(Connection connection, PojoGenerator pojoGenerator, MyFileLoader loader)
+    private static void fillTBProducts(Connection connection, PojoGenerator pojoGenerator)
             throws SQLException, MyException {
         String sql = "INSERT INTO tb_products (category_id, product_name, product_price) VALUES (?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             int numberOgProduct = Integer.parseInt(getProperty("numberOfProducts"));
             int count = 0;
-//            for(int i = 0; i < numberOgProduct; i++){
-//                Product prod = pojoGenerator.createProduct(loader);
-//                if(new MyValidator(prod).complexValidator()) {
-////                    setDataToTBProduct(statement, prod, count);
-//                    try {
-//                        statement.setInt(1, prod.getCategoryID());
-//                        statement.setString(2, prod.getName());
-//                        statement.setDouble(3, prod.getPrice());
-//                        statement.addBatch();
-//                        count++;
-//                        if (count % 100 == 0) {
-//                            logger.info("Download product line # {} ", count);
-//                            statement.executeBatch();
-//                        }
-//                    } catch (SQLException e) {
-//                        throw new RuntimeException();
-//                    }
-//                }
-//            }
-            Stream.generate(() -> pojoGenerator.createProduct(loader)).
-                    filter(prod -> new MyValidator(prod).complexValidator()).
-                    limit(numberOgProduct).
-                    forEach(valProd -> setDataToTBProduct(statement, valProd, count));
-            statement.executeBatch();
+            for (int i = 0; i < numberOgProduct; i++) {
+                Product product = pojoGenerator.createProduct(/*loader*/);
+                if (new MyValidator(product).complexValidator()) {
+                    try {
+                        statement.setInt(1, product.getCategoryID());
+                        statement.setString(2, product.getName());
+                        statement.setDouble(3, product.getPrice());
+                        statement.addBatch();
+                        count++;
+                        if (count % 100 == 0) {
+                            logger.info("Download product line # {} ", count);
+                            statement.executeBatch();
+                        }
+                    } catch (SQLException e) {
+                        throw new RuntimeException();
+                    }
+                }
+            }
         }
     }
 
@@ -208,28 +203,28 @@ public class MyApp {
         }
     }
 
-    /**
-     * The method sets the values for the corresponding columns of the current row and adds them to the batch
-     *
-     * @param statement - query instance in DB
-     * @param product   - an instance of the product object
-     * @param count     - request iteration counter
-     */
-    private static void setDataToTBProduct(PreparedStatement statement, Product product, int count) {
-        try {
-            statement.setInt(1, product.getCategoryID());
-            statement.setString(2, product.getName());
-            statement.setDouble(3, product.getPrice());
-            statement.addBatch();
-            count++;
-            if (count % 100 == 0) {
-                logger.info("Download product line # {} ", count);
-                statement.executeBatch();
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException();
-        }
-    }
+//    /**
+//     * The method sets the values for the corresponding columns of the current row and adds them to the batch
+//     *
+//     * @param statement - query instance in DB
+//     * @param product   - an instance of the product object
+//     * @param count     - request iteration counter
+//     */
+//    private static void setDataToTBProduct(PreparedStatement statement, Product product, int count) {
+//        try {
+//            statement.setInt(1, product.getCategoryID());
+//            statement.setString(2, product.getName());
+//            statement.setDouble(3, product.getPrice());
+//            statement.addBatch();
+//            count++;
+//            if (count % 100 == 0) {
+//                logger.info("Download product line # {} ", count);
+//                statement.executeBatch();
+//            }
+//        } catch (SQLException e) {
+//            throw new RuntimeException();
+//        }
+//    }
 
     /**
      * The method sets the values for the corresponding columns of the current row and adds them to the package
@@ -246,20 +241,6 @@ public class MyApp {
         } catch (SQLException e) {
             throw new RuntimeException();
         }
-    }
-
-    /**
-     * The method loads input data from files containing streets, cities, products and their properties
-     *
-     * @return - MyFileLoader
-     * @throws MyException -
-     */
-    private static MyFileLoader loadInputData() throws MyException {
-        MyFileLoader loader = new MyFileLoader();
-        loader.createInputDataFromFile(STREETS_FILE);
-        loader.createInputDataFromFile(CITIES_FILE);
-        loader.createInputDataFromFile(PRODUCTS_FILE);
-        return loader;
     }
 
     /**
@@ -286,24 +267,6 @@ public class MyApp {
             throw new MyException("Sorry! Please enter " + property + " required for connection!");
         }
     }
-
-//    private static void requestDllFormation() {
-//        try (FileWriter writer = new FileWriter("src/main/resources/" + "mySearchScript.sql", false)) {
-//            writer.write("SELECT p.product_id, p.product_name, c.category_name, s.shop_id, s.shop_name, " +
-//                    "s.shop_location, max(r.amount_id) max\r");
-//            writer.write("FROM tb_result r, tb_shops s, tb_products p, tb_categories c\r");
-//            writer.write("WHERE r.shop_id = s.shop_id AND r.products_id = p.product_id AND p.category_id = " +
-//                    "c.category_id AND c.category_name =" +
-//                    "'" + getSystemProperty() + "'" + "\r");
-//            writer.write("group by p.product_name, product_id, s.shop_id, s.shop_name, s.shop_location, " +
-//                    "c.category_name\r");
-//            writer.write("ORDER BY max desc\r");
-//            writer.write("LIMIT 1\r");
-//            writer.flush();
-//        } catch (IOException ex) {
-//            logger.error(ex.getMessage());
-//        }
-//    }
 
     /**
      * The method returns the value for the "category" system parameter, or the default value

@@ -17,7 +17,7 @@ class MyValidatorTest {
 
     @Test
     void complexValidatorReturnTrue() {
-        Shop shop = new Shop().setName("ТЦ Епіцентр № 333").setCity("Херсон").setLocation("вул. Тараса Шевченко, б.5");
+        Shop shop = new Shop().setName("Epicenter № 333").setCity("Khertson").setLocation("str, Tarasa Shevchenko, b.65");
         MyValidator myValidator = new MyValidator(shop);
         boolean actual = myValidator.complexValidator();
         assertTrue(actual);
@@ -25,7 +25,7 @@ class MyValidatorTest {
 
     @Test
     void validationMessagesGeneratorReturnListAndMessage() {
-        Shop shop = new Shop().setName(null).setCity("Херсон").setLocation("вул. Тараса Шевченко, б.5");
+        Shop shop = new Shop().setName(null).setCity("Khertson").setLocation("str, Tarasa Shevchenko, b.65");
         MyValidator myValidator = new MyValidator(shop);
         List<String> list = myValidator.validationMessagesGenerator();
         int expected = 1;

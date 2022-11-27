@@ -17,6 +17,8 @@ public class MyFileLoader {
     private final List<String> streets;
     private final List<String> cities;
     private final List<String> category;
+    private static final String CONFIG = "config/";
+    private static final String IDEA_RESOURCES = "src/main/resources/";
 
     public MyFileLoader() {
         this.products = new ArrayList<>();
@@ -27,12 +29,12 @@ public class MyFileLoader {
 
     private FileReader getFileReader(String fileName) {
         try {
-            return new FileReader("config/" + fileName);
+            return new FileReader(CONFIG + fileName);
         } catch (FileNotFoundException e) {
             try {
-                return new FileReader("src/main/resources/" + fileName);
+                return new FileReader(IDEA_RESOURCES + fileName);
             } catch (FileNotFoundException ex) {
-                throw new RuntimeException(ex);
+                throw new RuntimeException("ERROR! File not found! Please input correct file name!");
             }
         }
     }
@@ -42,14 +44,11 @@ public class MyFileLoader {
             while ((line = br.readLine()) != null) {
                 changer(fileName);
             }
-        } catch (FileNotFoundException e) {
-            throw new MyException("ERROR! File not found! Please input correct file name!");
         } catch (IOException e) {
             throw new MyException(e.toString());
         }
     }
-
-    private void changer(String fileName) throws MyException {
+        private void changer(String fileName) throws MyException {
         if (fileName.contains("cities")) {
             cities.add(line);
         } else if (fileName.contains("street")) {

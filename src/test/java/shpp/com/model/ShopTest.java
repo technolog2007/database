@@ -25,7 +25,7 @@ class ShopTest {
 
     @Test
     void getNameSetValueAndReturnIt() {
-        String expected = "ТЦ Епіцентр №10";
+        String expected = "Epicenter № 333";
         Shop shop = new Shop().setName(expected);
         String actual = shop.getName();
         assertEquals(expected, actual);
@@ -33,7 +33,7 @@ class ShopTest {
 
     @Test
     void shopNameSetNullAndIsInvalid(){
-        Shop shop = new Shop().setName(null).setCity("Київ").setLocation("Івана Франка, 10");
+        Shop shop = new Shop().setName(null).setCity("Sumy").setLocation("str.Ivana Franka, 10");
         Set<ConstraintViolation<Shop>> constraintViolations = validator.validate(shop);
         assertEquals(1, constraintViolations.size());
         assertEquals("{jakarta.validation.constraints.NotNull.message}", constraintViolations.iterator().next().getMessageTemplate());
@@ -41,7 +41,7 @@ class ShopTest {
 
     @Test
     void shopNameSetInvalidName(){
-        Shop shop = new Shop().setName("name").setCity("Київ").setLocation("Івана Франка, 10");
+        Shop shop = new Shop().setName("name").setCity("Lviv").setLocation("str.Ivana Franka, 10");
         Set<ConstraintViolation<Shop>> constraintViolations = validator.validate(shop);
         assertEquals(1, constraintViolations.size());
         assertEquals("{jakarta.validation.constraints.Pattern.message}", constraintViolations.iterator().next().getMessageTemplate());
@@ -49,7 +49,7 @@ class ShopTest {
 
     @Test
     void getLocationSetValueAndReturnIt() {
-        String expected = "м.Львів, вул. Чорновола, б.10";
+        String expected = "Lviv, st. Chornovola, b. 10";
         Shop shop = new Shop().setLocation(expected);
         String actual = shop.getLocation();
         assertEquals(expected, actual);
@@ -57,7 +57,7 @@ class ShopTest {
 
     @Test
     void shopLocationSetNullAndIsInvalid(){
-        Shop shop = new Shop().setName("ТЦ Епіцентр № 333").setCity("Київ").setLocation(null);
+        Shop shop = new Shop().setName("Epicenter № 333").setCity("Sumy").setLocation(null);
         Set<ConstraintViolation<Shop>> constraintViolations = validator.validate(shop);
         assertEquals(1, constraintViolations.size());
         assertEquals("{jakarta.validation.constraints.NotNull.message}", constraintViolations.iterator().next().getMessageTemplate());
@@ -65,7 +65,7 @@ class ShopTest {
 
     @Test
     void shopLocationSetInvalidName(){
-        Shop shop = new Shop().setName("ТЦ Епіцентр № 333").setCity("Київ").setLocation("Івана Ф.");
+        Shop shop = new Shop().setName("Epicenter № 333").setCity("Sumy").setLocation("Sumska");
         Set<ConstraintViolation<Shop>> constraintViolations = validator.validate(shop);
         assertEquals(1, constraintViolations.size());
         assertEquals("{jakarta.validation.constraints.Size.message}",
@@ -74,7 +74,7 @@ class ShopTest {
 
     @Test
     void getCitySetValueAndReturnIt() {
-        String expected = "Львів";
+        String expected = "Lviv";
         Shop shop = new Shop().setCity(expected);
         String actual = shop.getCity();
         assertEquals(expected, actual);
@@ -82,7 +82,7 @@ class ShopTest {
 
     @Test
     void shopCitySetNullAndIsInvalid(){
-        Shop shop = new Shop().setName("ТЦ Епіцентр № 333").setCity(null).setLocation("Тараса Шевченко");
+        Shop shop = new Shop().setName("Epicenter № 333").setCity(null).setLocation("Tarasa Shevchenko");
         Set<ConstraintViolation<Shop>> constraintViolations = validator.validate(shop);
         assertEquals(1, constraintViolations.size());
         assertEquals("{jakarta.validation.constraints.NotNull.message}", constraintViolations.iterator().next().getMessageTemplate());
@@ -90,7 +90,7 @@ class ShopTest {
 
     @Test
     void shopCitySetInvalidName(){
-        Shop shop = new Shop().setName("ТЦ Епіцентр № 333").setCity("Чоп").setLocation("Тараса Шевченко");
+        Shop shop = new Shop().setName("Epicenter № 333").setCity("Chi").setLocation("Tarasa Shevchenko");
         Set<ConstraintViolation<Shop>> constraintViolations = validator.validate(shop);
         assertEquals(1, constraintViolations.size());
         assertEquals("{jakarta.validation.constraints.Size.message}",
@@ -99,7 +99,7 @@ class ShopTest {
 
     @Test
     void setNameSetValueAndReturnIt() {
-        String actual = "ТЦ Епіцентр №10";
+        String actual = "Epicenter № 333";
         Shop shop = new Shop().setName(actual);
         String expected = shop.getName();
         assertEquals(expected, actual);
@@ -107,7 +107,7 @@ class ShopTest {
 
     @Test
     void setLocationSetValueAndReturnIt() {
-        String actual = "м.Львів, вул. Чорновола, б.10";
+        String actual = "Lviv, st. Chornovola, b. 10";
         Shop shop = new Shop().setLocation(actual);
         String expected = shop.getLocation();
         assertEquals(expected, actual);
@@ -115,7 +115,7 @@ class ShopTest {
 
     @Test
     void setCitySetValueAndReturnIt() {
-        String actual = "Львів";
+        String actual = "Lviv";
         Shop shop = new Shop().setCity(actual);
         String expected = shop.getCity();
         assertEquals(expected, actual);
@@ -123,8 +123,8 @@ class ShopTest {
 
     @Test
     void testToStringSetValuesInObjectAndReturnStringIsEquals() {
-        Shop shop = new Shop().setCity("Львів").setName("ТЦ Епіцентр №10").setLocation("м.Львів, вул. Чорновола, б.10");
-        String expected = "Shop{name='ТЦ Епіцентр №10', location='м.Львів, вул. Чорновола, б.10', city='Львів'}";
+        Shop shop = new Shop().setCity("Lviv").setName("Epicenter № 333").setLocation("Lviv, st. Chornovola, b. 10");
+        String expected = "Shop{name='Epicenter № 333', location='Lviv, st. Chornovola, b. 10', city='Lviv'}";
         String actual = shop.toString();
         assertEquals(expected, actual);
     }
