@@ -130,7 +130,7 @@ public class MyApp {
             int numberOgProduct = Integer.parseInt(getProperty("numberOfProducts"));
             int count = 0;
             for (int i = 0; i < numberOgProduct; i++) {
-                Product product = pojoGenerator.createProduct(/*loader*/);
+                Product product = pojoGenerator.createProduct();
                 if (new MyValidator(product).complexValidator()) {
                     try {
                         statement.setInt(1, product.getCategoryID());
@@ -145,6 +145,8 @@ public class MyApp {
                     } catch (SQLException e) {
                         throw new RuntimeException();
                     }
+                } else {
+                    numberOgProduct++;
                 }
             }
         }
