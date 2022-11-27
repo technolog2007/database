@@ -1,13 +1,11 @@
 package shpp.com.app;
 
-import ch.qos.logback.core.util.Loader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import shpp.com.model.Product;
 import shpp.com.model.Shop;
 import shpp.com.repo.ConnectToDB;
 import shpp.com.repo.SqlScriptExecutor;
-import shpp.com.util.MyFileLoader;
 import shpp.com.services.MyValidator;
 import shpp.com.services.PojoGenerator;
 import shpp.com.util.MyException;
@@ -170,9 +168,9 @@ public class MyApp {
             for (int i = 0; i < numberOfProducts; i++) {
                 setDataToTBResult(
                         statement,
-                        new Random().nextInt(numberOfShops),
-                        new Random().nextInt(numberOfProducts),
-                        new Random().nextInt(amount)
+                        1+ new Random().nextInt(numberOfShops),
+                        1+ new Random().nextInt(numberOfProducts),
+                        1+ new Random().nextInt(amount)
                 );
                 count++;
                 if (count % 100 == 0) {
