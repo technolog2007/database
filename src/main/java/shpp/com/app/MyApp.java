@@ -102,7 +102,7 @@ public class MyApp {
     private static void fillTBCategory(Connection connection) throws SQLException {
         String sqlCategory = "INSERT INTO tb_categories (category_name) VALUES (?)";
         try (PreparedStatement statement = connection.prepareStatement(sqlCategory)) {
-            PojoGenerator generator  = new PojoGenerator();
+            PojoGenerator generator = new PojoGenerator();
             List<String> list = generator.getListOfCategories();
             for (String s : list) {
                 statement.setString(1, s);
@@ -163,16 +163,17 @@ public class MyApp {
     private static void fillTBResult(Connection connection) throws MyException, SQLException {
         String sql = "INSERT INTO tb_result (shop_id, products_id, amount_id) VALUES (?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            int numberOfLeftovers = Integer.parseInt(getProperty("numberOfLeftovers"));
             int numberOfShops = Integer.parseInt(getProperty("numberOfShops"));
             int numberOfProducts = Integer.parseInt(getProperty("numberOfProducts"));
             int amount = Integer.parseInt(getProperty("amount"));
             int count = 0;
-            for (int i = 0; i < numberOfProducts; i++) {
+            for (int i = 0; i < numberOfLeftovers; i++) {
                 setDataToTBResult(
                         statement,
-                        1+ new Random().nextInt(numberOfShops),
-                        1+ new Random().nextInt(numberOfProducts),
-                        1+ new Random().nextInt(amount)
+                        getRandom(numberOfShops),
+                        getRandom(numberOfProducts),
+                        getRandom(amount)
                 );
                 count++;
                 if (count % 100 == 0) {
@@ -182,6 +183,10 @@ public class MyApp {
             }
             statement.executeBatch();
         }
+    }
+
+    private static int getRandom(int upperBound) {
+        return 1 + new Random().nextInt(upperBound);
     }
 
     /**
@@ -301,22 +306,23 @@ public class MyApp {
      * The method outputs the relevant data by REQUEST
      *
      * @param connection - connection
-     * @throws SQLException -
      */
-    private static void printRequest(Connection connection) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(getRequest());
-        ResultSet resultSet = statement.executeQuery();
-        logger.info("------------------------------------------------------------------------");
-        if (resultSet.next()) {
-            logger.info("product name is: {}", resultSet.getString("product_name"));
-            logger.info("category name is: {}", resultSet.getString("category_name"));
-            logger.info("shop name is: {}", resultSet.getString("shop_name"));
-            logger.info("shop location is: {}", resultSet.getString("shop_location"));
-            logger.info("max amount is: {}", resultSet.getInt("max"));
-        } else {
-            logger.error("ResultSet is empty!");
+    private static void printRequest(Connection connection) {
+        try(PreparedStatement statement = connection.prepareStatement(getRequest())) {
+            ResultSet resultSet = statement.executeQuery();
+            logger.info("------------------------------------------------------------------------");
+            if (resultSet.next()) {
+                logger.info("product name is: {}", resultSet.getString("product_name"));
+                logger.info("category name is: {}", resultSet.getString("category_name"));
+                logger.info("shop name is: {}", resultSet.getString("shop_name"));
+                logger.info("shop location is: {}", resultSet.getString("shop_location"));
+                logger.info("max amount is: {}", resultSet.getInt("max"));
+            } else {
+                logger.error("ResultSet is empty!");
+            }
+            resultSet.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        resultSet.close();
-        statement.close();
     }
 }
