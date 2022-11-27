@@ -153,7 +153,7 @@ public class MyApp {
     }
 
     /**
-     * The method fills the resulting table with random values (shop_id, products_id, amount_id)
+     * The method fills  the resulting table with random values (shop_id, products_id, amount_id)
      * that correspond to the values of the sho, categories, products tables
      *
      * @param connection - connection
