@@ -20,7 +20,7 @@ class PropertiesLoaderTest {
         PropertiesLoader loader = new PropertiesLoader();
         Properties properties = loader.loadProperties("app.properties");
         int actual = properties.size();
-        int expected = 11;
+        int expected = 12;
         assertEquals(expected, actual);
     }
 }
