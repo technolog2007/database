@@ -325,7 +325,7 @@ public class MyApp {
     }
 
     private static void setIndex(Connection connection){
-        String sqlIndex = "CREATE INDEX tb_categories";
+        String sqlIndex = "CREATE INDEX index_categories ON tb_categories(category_id)";
         try(PreparedStatement statement = connection.prepareStatement(sqlIndex)) {
             statement.execute();
         } catch (SQLException e) {
