@@ -13,6 +13,11 @@ public class ConnectToDB {
     private static final Logger logger = LoggerFactory.getLogger(ConnectToDB.class);
     private final Connection connection;
 
+    /**
+     * The constructor initializes the connection to the database
+     * @throws SQLException -
+     * @throws MyException -
+     */
     public ConnectToDB() throws SQLException, MyException {
         this.connection = DriverManager.getConnection(
                 getProperty("url"),
@@ -22,6 +27,10 @@ public class ConnectToDB {
         logger.info("Connect is successful!");
     }
 
+    /**
+     * The method returns a connection to the database
+     * @return - connection
+     */
     public Connection getConnection() {
         return connection;
     }

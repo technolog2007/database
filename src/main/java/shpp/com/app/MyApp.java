@@ -54,6 +54,7 @@ public class MyApp {
         fillTBResult(connection);
         logger.info("Result generator time is {} sec", getFinishTime(startTime));
         startTime = System.currentTimeMillis();
+        setIndex(connection);
         // making a request
         printRequest(connection);
         logger.info("request time is {} sec", getFinishTime(startTime));
@@ -96,7 +97,6 @@ public class MyApp {
      * The method fills table of product categories (category_name)
      *
      * @param connection - connection
-     *                   //     * @param loader     - data loader for generation from a file
      * @throws SQLException -
      */
     private static void fillTBCategory(Connection connection) throws SQLException {
@@ -119,7 +119,6 @@ public class MyApp {
      *
      * @param connection    - connection
      * @param pojoGenerator - product object generator
-     *                      //     * @param loader        - data loader for generation from a file
      * @throws SQLException -
      * @throws MyException  -
      */
@@ -155,7 +154,6 @@ public class MyApp {
     /**
      * The method fills  the resulting table with random values (shop_id, products_id, amount_id)
      * that correspond to the values of the sho, categories, products tables
-     *
      * @param connection - connection
      * @throws MyException  -
      * @throws SQLException -
@@ -321,6 +319,15 @@ public class MyApp {
                 logger.error("ResultSet is empty!");
             }
             resultSet.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static void setIndex(Connection connection){
+        String sqlIndex = "CREATE INDEX tb_categories";
+        try(PreparedStatement statement = connection.prepareStatement(sqlIndex)) {
+            statement.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
