@@ -53,8 +53,8 @@ public class MyApp {
         // filling in the results table
         fillTBResult(connection);
         logger.info("Result generator time is {} sec", getFinishTime(startTime));
+        setIndex(connection);
         startTime = System.currentTimeMillis();
-//        setIndex(connection);
         // making a request
         printRequest(connection);
         logger.info("request time is {} sec", getFinishTime(startTime));
@@ -325,7 +325,7 @@ public class MyApp {
     }
 
     private static void setIndex(Connection connection){
-        String sqlIndex = "CREATE INDEX index_categories ON tb_categories(category_id)";
+        String sqlIndex = "CREATE INDEX index_categories ON tb_products(category_id)";
         try(PreparedStatement statement = connection.prepareStatement(sqlIndex)) {
             statement.execute();
         } catch (SQLException e) {
