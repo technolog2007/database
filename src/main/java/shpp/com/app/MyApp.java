@@ -54,7 +54,7 @@ public class MyApp {
         fillTBResult(connection);
         logger.info("Result generator time is {} sec", getFinishTime(startTime));
         startTime = System.currentTimeMillis();
-        setIndex(connection);
+//        setIndex(connection);
         // making a request
         printRequest(connection);
         logger.info("request time is {} sec", getFinishTime(startTime));

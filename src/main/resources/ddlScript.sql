@@ -17,6 +17,8 @@ CREATE TABLE IF NOT EXISTS tb_categories
     category_name varchar(50)
 );
 
+CREATE INDEX index_categories ON tb_categories(category_id);
+
 CREATE TABLE IF NOT EXISTS tb_products
 (
     product_id    SERIAL UNIQUE NOT NULL PRIMARY KEY,
