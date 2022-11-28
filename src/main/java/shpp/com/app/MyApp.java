@@ -34,34 +34,34 @@ public class MyApp {
         SqlScriptExecutor executor = new SqlScriptExecutor();
         executor.executeSqlScript(DDL_SCRIPT_FILE, connect.getConnection());
         double finishTime = getFinishTime(startTime);
-        logger.info("Dll script time is {} sec", finishTime);
+        logger.info("Dll script time is {} mls", finishTime);
         // generate input data
         PojoGenerator pojoGenerator = new PojoGenerator();
         // filling out the shop sign
         startTime = System.currentTimeMillis();
         fillTBShop(connection, pojoGenerator);
-        logger.info("Shop generator time is {} sec", getFinishTime(startTime));
+        logger.info("Shop generator time is {} mls", getFinishTime(startTime));
         startTime = System.currentTimeMillis();
         // filling out the category table
         fillTBCategory(connection);
-        logger.info("Category generator time is {} sec", getFinishTime(startTime));
+        logger.info("Category generator time is {} mls", getFinishTime(startTime));
         startTime = System.currentTimeMillis();
         // filling in the products table
         fillTBProducts(connection, pojoGenerator);
-        logger.info("Product generator time is {} sec", getFinishTime(startTime));
+        logger.info("Product generator time is {} mls", getFinishTime(startTime));
         startTime = System.currentTimeMillis();
         // filling in the results table
         fillTBResult(connection);
-        logger.info("Result generator time is {} sec", getFinishTime(startTime));
+        logger.info("Result generator time is {} mls", getFinishTime(startTime));
         // set index to products table to categories_id
         setIndex(connection);
         startTime = System.currentTimeMillis();
         // making a request
         printRequest(connection);
-        logger.info("request time is {} sec", getFinishTime(startTime));
+        logger.info("request time is {} mls", getFinishTime(startTime));
         connection.commit();
         connection.close();
-        logger.info("program time is {} sec", getFinishTime(startProgramTime));
+        logger.info("program time is {} mls", getFinishTime(startProgramTime));
     }
 
     /**
@@ -71,7 +71,7 @@ public class MyApp {
      * @return - the actual time of the operation
      */
     private static double getFinishTime(long startTime) {
-        return (System.currentTimeMillis() - startTime) * 0.001;
+        return System.currentTimeMillis() - startTime;
     }
 
     /**
@@ -270,7 +270,8 @@ public class MyApp {
     private static String getRequest() {
         String category = getSystemProperty();
         return "SELECT p.product_id, p.product_name, c.category_name, s.shop_id, s.shop_name, s.shop_location, " +
-                "max(r.amount_id) max FROM tb_result r, tb_shops s, tb_products p, tb_categories c " +
+                "max(r.amount_id) max " +
+                "FROM tb_result r, tb_shops s, tb_products p, tb_categories c " +
                 "WHERE r.shop_id = s.shop_id AND r.products_id = p.product_id AND p.category_id = c.category_id " +
                 "AND c.category_name =" + "'" + category + "'" +
                 "group by p.product_name, product_id, s.shop_id, s.shop_name, s.shop_location, c.category_name " +
@@ -283,7 +284,9 @@ public class MyApp {
      * @param connection - connection
      */
     private static void setIndex(Connection connection){
-        String sqlIndex = "CREATE INDEX index_categories ON tb_products(category_id)";
+//        String sqlIndex = "CREATE INDEX index_categories ON tb_products(category_id)";
+        String sqlIndex = "CREATE INDEX index_categories ON tb_categories(category_id)";
+//        String sqlIndex = "CREATE INDEX index_categories ON tb_products(product_id)";
         try(PreparedStatement statement = connection.prepareStatement(sqlIndex)) {
             statement.execute();
         } catch (SQLException e) {
