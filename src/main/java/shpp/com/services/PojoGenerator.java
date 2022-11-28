@@ -25,7 +25,6 @@ public class PojoGenerator {
         this.listOfCategories = loader.getCategory();
         this.listOfProducts = loader.getProducts();
     }
-
     /**
      * The method loads input data from files containing streets, cities, products and their properties
      *
@@ -39,8 +38,10 @@ public class PojoGenerator {
         loader.createInputDataFromFile(PRODUCTS_FILE);
         return loader;
     }
-
-    // name, location, City
+    /**
+     * The method creates a store object from the fields name, city and location
+     * @return - Shop object
+     */
     public Shop createShop() {
         String shopName = "Epicenter № " + new Random().nextInt(UPPER_GENERATE_BOUND);
         String city = listOfCities.get(new Random().nextInt(listOfCities.size() - 1));
@@ -49,8 +50,10 @@ public class PojoGenerator {
                 ", " + new Random().nextInt(UPPER_GENERATE_BOUND);
         return new Shop().setName(shopName).setCity(city).setLocation(location);
     }
-
-    // category id, category name, product name and price
+    /**
+     * The method creates a product object from the fields name, categoryID, price
+     * @return - Product object
+     */
     public Product createProduct() {
         List<String> temp = listOfProducts.get(new Random().nextInt(listOfProducts.size() - 2));
         String name = temp.get(2) + ", art. # " + new Random().nextInt(UPPER_GENERATE_BOUND);
@@ -60,11 +63,11 @@ public class PojoGenerator {
                 setPrice(new Random().nextDouble() * UPPER_GENERATE_BOUND);
     }
 
+    /**
+     * Method for converting a list of product category names
+     * @return - list of product category names
+     */
     public List<String> getListOfCategories(){
         return listOfCategories;
     }
-//
-//    public int getAmountOfCategory(){
-//        return
-//    }
 }

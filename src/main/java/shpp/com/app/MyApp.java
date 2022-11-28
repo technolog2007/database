@@ -53,6 +53,7 @@ public class MyApp {
         // filling in the results table
         fillTBResult(connection);
         logger.info("Result generator time is {} sec", getFinishTime(startTime));
+        // set index to products table to categories_id
         setIndex(connection);
         startTime = System.currentTimeMillis();
         // making a request
@@ -301,6 +302,19 @@ public class MyApp {
     }
 
     /**
+     * The method creates an index for the category_id column, tb_products table
+     * @param connection - connection
+     */
+    private static void setIndex(Connection connection){
+        String sqlIndex = "CREATE INDEX index_categories ON tb_products(category_id)";
+        try(PreparedStatement statement = connection.prepareStatement(sqlIndex)) {
+            statement.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
      * The method outputs the relevant data by REQUEST
      *
      * @param connection - connection
@@ -319,15 +333,6 @@ public class MyApp {
                 logger.error("ResultSet is empty!");
             }
             resultSet.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private static void setIndex(Connection connection){
-        String sqlIndex = "CREATE INDEX index_categories ON tb_products(category_id)";
-        try(PreparedStatement statement = connection.prepareStatement(sqlIndex)) {
-            statement.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
