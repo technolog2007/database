@@ -43,11 +43,11 @@ public class PojoGenerator {
      * @return - Shop object
      */
     public Shop createShop() {
-        String shopName = "Epicenter № " + new Random().nextInt(UPPER_GENERATE_BOUND);
-        String city = listOfCities.get(new Random().nextInt(listOfCities.size() - 1));
+        String shopName = "Epicenter № " + getRandomInt(UPPER_GENERATE_BOUND);
+        String city = listOfCities.get(getRandomInt(listOfCities.size()));
         String location = "city " + city + ", str. " +
-                listOfStreets.get(new Random().nextInt(listOfStreets.size() - 1)) +
-                ", " + new Random().nextInt(UPPER_GENERATE_BOUND);
+                listOfStreets.get(getRandomInt(listOfStreets.size())) +
+                ", " + getRandomInt(UPPER_GENERATE_BOUND);
         return new Shop().setName(shopName).setCity(city).setLocation(location);
     }
     /**
@@ -55,12 +55,21 @@ public class PojoGenerator {
      * @return - Product object
      */
     public Product createProduct() {
-        List<String> temp = listOfProducts.get(new Random().nextInt(listOfProducts.size() - 2));
-        String name = temp.get(2) + ", art. # " + new Random().nextInt(UPPER_GENERATE_BOUND);
+        List<String> temp = listOfProducts.get(1 + getRandomInt(listOfProducts.size() - 1));
+        String name = temp.get(2) + ", art. # " + getRandomInt(UPPER_GENERATE_BOUND);
         return new Product().
                 setCategoryID(Integer.parseInt(temp.get(0))).
                 setName(name).
                 setPrice(new Random().nextDouble() * UPPER_GENERATE_BOUND);
+    }
+
+    /**
+     * The method generates a random integer from 1 to upperBound
+     * @param upperBound - upper limit of integer generation
+     * @return - number generated within specified limits
+     */
+    private int getRandomInt(int upperBound){
+        return 1 + new Random().nextInt(upperBound - 1);
     }
 
     /**

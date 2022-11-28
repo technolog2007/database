@@ -1,9 +1,5 @@
 package shpp.com.util;
 
-import shpp.com.app.MyApp;
-import shpp.com.repo.ConnectToDB;
-import shpp.com.util.MyException;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;

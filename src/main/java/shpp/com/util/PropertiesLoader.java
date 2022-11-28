@@ -3,7 +3,6 @@ package shpp.com.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import shpp.com.app.MyApp;
-import shpp.com.repo.ConnectToDB;
 
 import java.io.FileInputStream;
 import java.io.IOException;
