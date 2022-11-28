@@ -14,14 +14,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class PojoGeneratorTest {
     private static final String PRODUCTS_FILE = "products.txt";
     @Test
-    void createShopInitialObjectIsNotNullAndValueIsInsideIt() {
-//        String expectedData = "Sumy";
-//        MyFileLoader loader = Mockito.mock(MyFileLoader.class);
-//        PojoGenerator generator = Mockito.mock(PojoGenerator.class);
-//        Shop shop = generator.createShop(/*List.of(expectedData, expectedData), List.of("Sumskaya")*/);
-//        assertNotNull(shop);
-//        String actualData = shop.getCity();
-//        assertTrue(actualData.contains(expectedData));
+    void createShopInitialObjectIsNotNull() throws MyException {
+        MyFileLoader loader = new MyFileLoader();
+        loader.createInputDataFromFile(PRODUCTS_FILE);
+        PojoGenerator pojoGenerator = new PojoGenerator();
+        Shop shop = pojoGenerator.createShop();
+        assertNotNull(shop);
     }
 
     @Test
@@ -29,7 +27,7 @@ class PojoGeneratorTest {
         MyFileLoader loader = new MyFileLoader();
         loader.createInputDataFromFile(PRODUCTS_FILE);
         PojoGenerator pojoGenerator = new PojoGenerator();
-        Product product = pojoGenerator.createProduct(/*loader*/);
+        Product product = pojoGenerator.createProduct();
         assertNotNull(product);
     }
 }
