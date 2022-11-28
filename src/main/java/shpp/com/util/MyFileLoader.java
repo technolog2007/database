@@ -6,9 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MyFileLoader {
-
     private String line;
-
     private final List<List<String>> products;
     private final List<String> streets;
     private final List<String> cities;
@@ -16,6 +14,9 @@ public class MyFileLoader {
     private static final String CONFIG = "config/";
     private static final String IDEA_RESOURCES = "src/main/resources/";
 
+    /**
+     * The constructor initializes the input lists
+     */
     public MyFileLoader() {
         this.products = new ArrayList<>();
         this.streets = new ArrayList<>();
@@ -23,6 +24,11 @@ public class MyFileLoader {
         this.category = new ArrayList<>();
     }
 
+    /**
+     * The method selects the reader file depending on how the program is launched (from IDEA or *.jar)
+     * @param fileName - file name
+     * @return - valid FileReader
+     */
     private FileReader getFileReader(String fileName) {
         try {
             return new FileReader(CONFIG + fileName);
@@ -35,6 +41,11 @@ public class MyFileLoader {
         }
     }
 
+    /**
+     * The method reads data from the file and writes them to the corresponding list
+     * @param fileName - file name
+     * @throws MyException -
+     */
     public void createInputDataFromFile(String fileName) throws MyException {
         try (BufferedReader br = new BufferedReader(getFileReader(fileName))) {
             while ((line = br.readLine()) != null) {
@@ -44,7 +55,13 @@ public class MyFileLoader {
             throw new MyException(e.toString());
         }
     }
-        private void changer(String fileName) throws MyException {
+
+    /**
+     * The method parses and records the input data for forming store and product objects in the appropriate list.
+     * @param fileName - file name
+     * @throws MyException -
+     */
+    private void changer(String fileName) throws MyException {
         if (fileName.contains("cities")) {
             cities.add(line);
         } else if (fileName.contains("street")) {
@@ -61,18 +78,31 @@ public class MyFileLoader {
         }
     }
 
+    /**
+     * The method returns a list of inputs for creating products
+     * @return - input list
+     */
     public List<List<String>> getProducts() {
         return products;
     }
-
+    /**
+     * The method returns a list of input data for forming store objects
+     * @return - input list
+     */
     public List<String> getStreets() {
         return streets;
     }
-
+    /**
+     * The method returns a list of input data for forming store objects
+     * @return - input list
+     */
     public List<String> getCities() {
         return cities;
     }
-
+    /**
+     * The method returns a list of input data for forming store objects
+     * @return - input list
+     */
     public List<String> getCategory() {
         return category;
     }

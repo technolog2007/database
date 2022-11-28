@@ -115,42 +115,42 @@ public class MyApp {
         }
     }
 
-    /**
-     * The method fills the products table with random values (category_id, product_name, product_price)
-     *
-     * @param connection    - connection
-     * @param pojoGenerator - product object generator
-     * @throws SQLException -
-     * @throws MyException  -
-     */
-    private static void fillTBProducts(Connection connection, PojoGenerator pojoGenerator)
-            throws SQLException, MyException {
-        String sql = "INSERT INTO tb_products (category_id, product_name, product_price) VALUES (?, ?, ?)";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            int numberOgProduct = Integer.parseInt(getProperty("numberOfProducts"));
-            int count = 0;
-            for (int i = 0; i < numberOgProduct; i++) {
-                Product product = pojoGenerator.createProduct();
-                if (new MyValidator(product).complexValidator()) {
-                    try {
-                        statement.setInt(1, product.getCategoryID());
-                        statement.setString(2, product.getName());
-                        statement.setDouble(3, product.getPrice());
-                        statement.addBatch();
-                        count++;
-                        if (count % 100 == 0) {
-                            logger.info("Download product line # {} ", count);
-                            statement.executeBatch();
-                        }
-                    } catch (SQLException e) {
-                        throw new RuntimeException();
-                    }
-                } else {
-                    numberOgProduct++;
-                }
-            }
-        }
-    }
+//    /**
+//     * The method fills the products table with random values (category_id, product_name, product_price)
+//     *
+//     * @param connection    - connection
+//     * @param pojoGenerator - product object generator
+//     * @throws SQLException -
+//     * @throws MyException  -
+//     */
+//    private static void fillTBProducts(Connection connection, PojoGenerator pojoGenerator)
+//            throws SQLException, MyException {
+//        String sql = "INSERT INTO tb_products (category_id, product_name, product_price) VALUES (?, ?, ?)";
+//        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+//            int numberOgProduct = Integer.parseInt(getProperty("numberOfProducts"));
+//            int count = 0;
+//            for (int i = 0; i < numberOgProduct; i++) {
+//                Product product = pojoGenerator.createProduct();
+//                if (new MyValidator(product).complexValidator()) {
+//                    try {
+//                        statement.setInt(1, product.getCategoryID());
+//                        statement.setString(2, product.getName());
+//                        statement.setDouble(3, product.getPrice());
+//                        statement.addBatch();
+//                        count++;
+//                        if (count % 100 == 0) {
+//                            logger.info("Download product line # {} ", count);
+//                            statement.executeBatch();
+//                        }
+//                    } catch (SQLException e) {
+//                        throw new RuntimeException();
+//                    }
+//                } else {
+//                    numberOgProduct++;
+//                }
+//            }
+//        }
+//    }
 
     /**
      * The method fills  the resulting table with random values (shop_id, products_id, amount_id)
@@ -207,28 +207,47 @@ public class MyApp {
         }
     }
 
-//    /**
-//     * The method sets the values for the corresponding columns of the current row and adds them to the batch
-//     *
-//     * @param statement - query instance in DB
-//     * @param product   - an instance of the product object
-//     * @param count     - request iteration counter
-//     */
-//    private static void setDataToTBProduct(PreparedStatement statement, Product product, int count) {
-//        try {
-//            statement.setInt(1, product.getCategoryID());
-//            statement.setString(2, product.getName());
-//            statement.setDouble(3, product.getPrice());
-//            statement.addBatch();
-//            count++;
-//            if (count % 100 == 0) {
-//                logger.info("Download product line # {} ", count);
-//                statement.executeBatch();
-//            }
-//        } catch (SQLException e) {
-//            throw new RuntimeException();
-//        }
-//    }
+    /**
+     *
+     * @param connection -
+     * @param pojoGenerator -
+     * @throws SQLException -
+     * @throws MyException -
+     */
+    private static void fillTBProducts(Connection connection, PojoGenerator pojoGenerator)
+            throws SQLException, MyException {
+        String sql = "INSERT INTO tb_products (category_id, product_name, product_price) VALUES (?, ?, ?)";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            int numberOgProduct = Integer.parseInt(getProperty("numberOfProducts"));
+            int count = 0;
+            Stream.generate(pojoGenerator::createProduct).
+                    filter((product) -> new MyValidator(product).complexValidator()).
+                    limit(numberOgProduct).forEach((product) -> setDataToTBProduct(statement, product, count));
+        }
+    }
+
+    /**
+     * The method sets the values for the corresponding columns of the current row and adds them to the batch
+     *
+     * @param statement - query instance in DB
+     * @param product   - an instance of the product object
+     * @param count     - request iteration counter
+     */
+    private static void setDataToTBProduct(PreparedStatement statement, Product product, int count) {
+        try {
+            statement.setInt(1, product.getCategoryID());
+            statement.setString(2, product.getName());
+            statement.setDouble(3, product.getPrice());
+            statement.addBatch();
+            count++;
+            if (count % 100 == 0) {
+                logger.info("Download product line # {} ", count);
+                statement.executeBatch();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException();
+        }
+    }
 
     /**
      * The method sets the values for the corresponding columns of the current row and adds them to the package
