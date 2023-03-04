@@ -16,7 +16,6 @@ public class Shop {
     private String city;
 
     public Shop() {
-        //
     }
 
     public String getName() {

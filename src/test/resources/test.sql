@@ -1,0 +1,5 @@
+CREATE
+DATABASE epicenter
+    WITH ENCODING = 'UTF8'
+    OWNER = postgres
+    CONNECTION LIMIT 15;

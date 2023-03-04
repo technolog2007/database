@@ -1,0 +1,47 @@
+1, Food, Bread
+1, Food, Salo
+1, Food, Meat
+1, Food, Sugar
+1, Food, Butter
+1, Food, Sweets
+1, Food, Coffee
+1, Food, Cookies
+1, Food, Water
+2, Animal products, Food for dogs
+2, Animal products, Food for cats
+2, Animal products, Feed for rodents
+2, Animal products, Food for fish
+3, Construction and repair, Tile
+3, Construction and repair, Cement
+3, Construction and repair, Cable
+3, Construction and repair, Linoleum
+3, Construction and repair, Lamp
+3, Construction and repair, Drywall
+4, Tourism, Tent
+4, Tourism, Sleeping bag
+4, Tourism, Backpack
+4, Tourism, Cauldron
+4, Tourism, Canoe
+5, Auto goods, Wheels
+5, Auto goods, Discs
+5, Auto goods, Carburettor
+5, Auto goods, Rugs
+5, Auto goods, Speedometer sensor
+6, Sports goods, Simulator
+6, Sports goods, Dumbbell
+6, Sports goods, Tennis racket
+6, Sports goods, Sneakers
+7, Electronics, TV
+7, Electronics, Laptop
+7, Electronics, Smartphone
+7, Electronics, Gaming console
+8, Household appliances, Refrigerator
+8, Household appliances, Washing machine
+8, Household appliances, Vacuum cleaner
+8, Household appliances, Iron
+8, Household appliances, Air conditioning
+9, Furniture, Closet
+9, Furniture, Chair
+9, Furniture, Table
+9, Furniture, Shelf
+9, Furniture, Sofa

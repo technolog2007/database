@@ -1,26 +1,29 @@
 package shpp.com.util;
 
-import org.junit.jupiter.api.Test;
-
-import java.util.Properties;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class PropertiesLoaderTest {
-    @Test
-    void loadPropertiesFromIncorrectFile() {
-        PropertiesLoader loader = new PropertiesLoader();
-        int expected = 0;
-        Properties actual = loader.loadProperties("ap.properties");
-        assertEquals(expected, actual.size());
-    }
+import java.util.Properties;
+import org.junit.jupiter.api.Test;
 
-    @Test
-    void loadPropertiesLoadAllProperty() {
-        PropertiesLoader loader = new PropertiesLoader();
-        Properties properties = loader.loadProperties("app.properties");
-        int actual = properties.size();
-        int expected = 12;
-        assertEquals(expected, actual);
-    }
+class PropertiesLoaderTest {
+
+  private static final String PROPERTIES_TEST_FILE = "app.properties";
+  private static final String PROPERTIES_TEST_FILE_PATH = "src/test/resources/";
+
+  @Test
+  void loadPropertiesFromIncorrectFile() {
+    PropertiesLoader loader = new PropertiesLoader();
+    int expected = 0;
+    Properties actual = loader.loadProperties("ap.properties", PROPERTIES_TEST_FILE_PATH);
+    assertEquals(expected, actual.size());
+  }
+
+  @Test
+  void loadPropertiesLoadAllProperty() {
+    PropertiesLoader loader = new PropertiesLoader();
+    Properties properties = loader.loadProperties(PROPERTIES_TEST_FILE, PROPERTIES_TEST_FILE_PATH);
+    int actual = properties.size();
+    int expected = 12;
+    assertEquals(expected, actual);
+  }
 }
